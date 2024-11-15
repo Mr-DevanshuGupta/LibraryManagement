@@ -10,4 +10,3 @@ public enum Permissions {
 	@Getter
 	private final String permission;
 }
-

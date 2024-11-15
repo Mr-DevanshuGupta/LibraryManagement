@@ -1,4 +1,5 @@
 package com.syvora.syvora.entity;
+
 import java.time.LocalDateTime;
 import java.util.Collection;
 
@@ -72,7 +73,6 @@ public class User implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return role.getAuthorities();
-//		return List.of(new SimpleGrantedAuthority(role.name()));
 	}
 
 	@Override

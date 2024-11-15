@@ -109,6 +109,7 @@ const BookFormDialog: React.FC<BookFormDialogProps> = ({
                             name="authorID"
                             value={formData.authorID}
                             onChange={handleSelectChange}
+                            label="Author"
                             required
                         >
                             {authors.map((author) => (
@@ -125,6 +126,7 @@ const BookFormDialog: React.FC<BookFormDialogProps> = ({
                             name="genreID"
                             multiple
                             value={formData.genreID}
+                            label="Genres"
                             onChange={handleSelectChange}
                             renderValue={(selected) => selected.map((id: number) => genres.find((genre) => genre.id === id)?.name).join(", ")}
                         >

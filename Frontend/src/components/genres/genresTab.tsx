@@ -1,33 +1,12 @@
-import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   addGenreRequest,
   fetchGenresRequest,
   updateGenreRequest,
 } from "@/redux/genre/genreSlice";
-import {
-  Alert,
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  Pagination,
-  Paper,
-  Snackbar,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-  Typography,
-} from "@mui/material";
-
-import EditIcon from "@mui/icons-material/Edit";
+import { Button, Box, Snackbar, Typography, Alert, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import GenresTable from "./genresTable";
 
 const GenresTab = () => {
   const [form, setForm] = useState<Omit<Genre, "id">>({
@@ -36,9 +15,7 @@ const GenresTab = () => {
   });
   const [editId, setEditId] = useState<number | null>(null);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [authSnackbarOpen, setAuthSnackbarOpen] = useState(false);
-
   const dispatch = useAppDispatch();
   const { genres, status, error, totalGenres } = useAppSelector((state) => state.genres);
   const { isAuthenticated } = useAppSelector((state) => state.auth);
@@ -48,32 +25,8 @@ const GenresTab = () => {
   const totalPages = Math.ceil(totalGenres / pageSize);
 
   useEffect(() => {
-    dispatch(fetchGenresRequest({pageSize: pageSize, pageNumber:currentPage}));
+    dispatch(fetchGenresRequest({ pageSize, pageNumber: currentPage }));
   }, [dispatch, currentPage]);
-
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    const trimmedForm = {
-      ...form,
-      name: form.name.trim(),
-      description: form.description.trim(),
-    };
-
-    if (editId) {
-      dispatch(updateGenreRequest({ id: editId, genre: trimmedForm }));
-    } else {
-      dispatch(addGenreRequest(trimmedForm));
-    }
-
-    resetForm();
-    setOpenDialog(false);
-  };
 
   const handleAddGenre = () => {
     if (!isAuthenticated) {
@@ -97,21 +50,43 @@ const GenresTab = () => {
     setOpenDialog(true);
   };
 
-  const resetForm = () => {
-    setForm({ name: "", description: "" });
-    setEditId(null);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmedForm = {
+      ...form,
+      name: form.name.trim(),
+      description: form.description.trim(),
+    };
+
+    if (editId) {
+      dispatch(updateGenreRequest({ id: editId, genre: trimmedForm }));
+    } else {
+      dispatch(addGenreRequest(trimmedForm));
+    }
+
+    resetForm();
+    setOpenDialog(false);
   };
 
   const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
-
-  const handleAuthSnackbarClose = () => {
     setAuthSnackbarOpen(false);
   };
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
+  };
+
+  const resetForm = () => {
+    setForm({
+      name: "",
+      description: "",
+    });
+    setEditId(null);
   };
 
   return (
@@ -124,59 +99,28 @@ const GenresTab = () => {
 
       {status === "failed" && <Typography color="error">{error}</Typography>}
 
-      <TableContainer component={Paper} sx={{ mt: 2 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {genres.map((genre: Genre) => (
-              <TableRow key={genre.id}>
-                <TableCell>{genre.name}</TableCell>
-                <TableCell>{genre.description}</TableCell>
-                <TableCell>
-                  <IconButton onClick={() => handleEdit(genre)}>
-                    <EditIcon color="primary" />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      <Pagination
-        count={totalPages}
-        page={currentPage}
-        onChange={handlePageChange}
-        color="primary"
-        sx={{ mt: 2 }}
-      />
+      <GenresTable genres={genres} onEdit={handleEdit} />
 
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
         <DialogTitle>{editId ? "Edit Genre" : "Add Genre"}</DialogTitle>
         <DialogContent>
           <form onSubmit={handleSubmit}>
             <TextField
-              name="name"
               label="Genre Name"
+              name="name"
               value={form.name}
               onChange={handleChange}
-              required
               fullWidth
+              required
               margin="normal"
             />
             <TextField
-              name="description"
               label="Description"
+              name="description"
               value={form.description}
               onChange={handleChange}
-              required
               fullWidth
+              required
               margin="normal"
             />
             <DialogActions>
@@ -192,21 +136,12 @@ const GenresTab = () => {
       </Dialog>
 
       <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-      >
-        <Alert onClose={handleSnackbarClose} severity="success">
-          Genre saved successfully!
-        </Alert>
-      </Snackbar>
-      <Snackbar
         open={authSnackbarOpen}
         autoHideDuration={3000}
-        onClose={handleAuthSnackbarClose}
+        onClose={handleSnackbarClose}
       >
-        <Alert onClose={handleAuthSnackbarClose} severity="error">
-          Please log in to edit or add Genre details.
+        <Alert onClose={handleSnackbarClose} severity="error">
+          Please log in to edit or add genre details.
         </Alert>
       </Snackbar>
     </Box>

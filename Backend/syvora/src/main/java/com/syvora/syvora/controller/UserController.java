@@ -14,10 +14,10 @@ import com.syvora.syvora.service.UserService;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@GetMapping("/{id}")
 	public ResponseEntity<User> getUser(@PathVariable Integer id) {
 		User user = userService.getUser(id);

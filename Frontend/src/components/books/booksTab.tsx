@@ -196,7 +196,7 @@ const BooksTab = () => {
 
             {status === "failed" && <Typography color="error">{error}</Typography>}
 
-            <BooksTable booksWithImages={booksWithImages}onEdit={handleEdit} onDelete={handleDelete} />
+            <BooksTable booksWithImages={booksWithImages} onEdit={handleEdit} onDelete={handleDelete} />
 
             <Pagination
                 count={totalPages}

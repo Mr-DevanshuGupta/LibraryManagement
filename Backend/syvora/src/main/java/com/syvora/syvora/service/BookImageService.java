@@ -16,22 +16,22 @@ import com.syvora.syvora.repository.BooksRepository;
 
 @Service
 public class BookImageService {
-	
+
 	@Autowired
 	private FileStorageService fileStorageService;
-	
+
 	@Autowired
 	private BookImageRepository bookImageRepository;
-	
+
 	@Autowired
 	private BooksRepository booksRepository;
-	
+
 	public ResponseEntity<HttpStatus> addImage(Integer bookId, MultipartFile file) throws IOException {
 		BookImage image = new BookImage();
 		Books book = booksRepository.findById(bookId).orElse(null);
-		if(book == null) {
+		if (book == null) {
 			throw new NoSuchExists("Book does not exists with this bookID: " + bookId);
-		}else {			
+		} else {
 			image.setBook(book);
 			String fileName = fileStorageService.storeFile(file);
 			image.setFileName(fileName);
@@ -42,16 +42,16 @@ public class BookImageService {
 
 	public BookImage getImage(Integer bookId) {
 		Books book = booksRepository.findById(bookId).orElse(null);
-		if(book == null) {
+		if (book == null) {
 			throw new NoSuchExists("Book does not exists with this bookID: " + bookId);
-		}else {	
-			return bookImageRepository.findByBook(book);			
+		} else {
+			return bookImageRepository.findByBook(book);
 		}
 	}
 
 	public ResponseEntity<HttpStatus> updateImage(Integer bookId, MultipartFile file) throws IOException {
 		Books book = booksRepository.findById(bookId).orElse(null);
-		if(book == null) {
+		if (book == null) {
 			throw new NoSuchExists("Book does not exists with this bookID: " + bookId);
 		}
 		BookImage image = bookImageRepository.findByBook(book);
@@ -60,7 +60,7 @@ public class BookImageService {
 		image.setFileName(fileName);
 		bookImageRepository.save(image);
 		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
-		
+
 	}
 
 }

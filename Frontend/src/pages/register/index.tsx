@@ -29,7 +29,6 @@ const Register = () => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!firstName || !lastName || !email || !password) {
-            // alert("All fields are required!");
             setlocalError('All fields are required!');
             console.log("local error called");
             return;

@@ -1,7 +1,5 @@
 package com.syvora.syvora.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,25 +24,26 @@ import com.syvora.syvora.service.GenresService;
 public class GenresController {
 	@Autowired
 	private GenresService genreService;
-	
+
 	@GetMapping("/")
-	public ResponseEntity<GenresResponseDTO> getAll(@RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
-			@RequestParam(value = "pageNumber", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) Integer pageNumber){
-		return genreService.getAll(pageSize, pageNumber-1);
+	public ResponseEntity<GenresResponseDTO> getAll(
+			@RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
+			@RequestParam(value = "pageNumber", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) Integer pageNumber) {
+		return genreService.getAll(pageSize, pageNumber - 1);
 	}
-	
+
 	@PostMapping("/")
-	public ResponseEntity<Genres> add(@RequestBody GenreDTO request){
+	public ResponseEntity<Genres> add(@RequestBody GenreDTO request) {
 		return genreService.add(request);
 	}
-	
+
 	@PutMapping("/{id}")
-	public ResponseEntity<Genres> update(@PathVariable Integer id ,@RequestBody GenreDTO request){
+	public ResponseEntity<Genres> update(@PathVariable Integer id, @RequestBody GenreDTO request) {
 		return genreService.update(id, request);
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<HttpStatus> delete(@PathVariable Integer id){
+	public ResponseEntity<HttpStatus> delete(@PathVariable Integer id) {
 		return genreService.delete(id);
 	}
 }

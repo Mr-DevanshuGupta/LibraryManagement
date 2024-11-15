@@ -21,20 +21,20 @@ import com.syvora.syvora.service.FileStorageService;
 @RestController
 @RequestMapping("/books/image")
 public class BookImageController {
-	
-	
+
 	@Autowired
 	private BookImageService bookImageService;
-	
-	@Autowired FileStorageService fileStorageService;
-	
+
+	@Autowired
+	FileStorageService fileStorageService;
+
 	@PostMapping("/{bookId}")
 	public ResponseEntity<HttpStatus> addImage(@RequestParam("file") MultipartFile file,
 			@PathVariable("bookId") Integer bookId) throws IOException {
 		System.out.println("Inside a addImage controller");
 		return bookImageService.addImage(bookId, file);
 	}
-	
+
 	@GetMapping("/{bookId}")
 	public byte[] getImageWithProductId(@PathVariable Integer bookId) throws IOException {
 		BookImage image = bookImageService.getImage(bookId);
@@ -43,9 +43,10 @@ public class BookImageController {
 		}
 		return fileStorageService.loadFile(image.getFileName());
 	}
-	
+
 	@PutMapping("/{bookId}")
-	public ResponseEntity<HttpStatus> updateImage(@RequestParam("file") MultipartFile file, @PathVariable("bookId") Integer bookId) throws IOException{
+	public ResponseEntity<HttpStatus> updateImage(@RequestParam("file") MultipartFile file,
+			@PathVariable("bookId") Integer bookId) throws IOException {
 		return bookImageService.updateImage(bookId, file);
 	}
 }

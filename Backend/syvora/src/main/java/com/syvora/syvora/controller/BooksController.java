@@ -1,7 +1,6 @@
 package com.syvora.syvora.controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,11 +29,11 @@ public class BooksController {
 	private BooksService booksService;
 
 	@GetMapping("/")
-	public ResponseEntity<BooksResponseDTO> getAll(@RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
+	public ResponseEntity<BooksResponseDTO> getAll(
+			@RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
 			@RequestParam(value = "pageNumber", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) Integer pageNumber,
-			@RequestParam(value = "keyword", required = false) String keyword
-) {
-		return booksService.getAll(pageSize, pageNumber-1, keyword);
+			@RequestParam(value = "keyword", required = false) String keyword) {
+		return booksService.getAll(pageSize, pageNumber - 1, keyword);
 	}
 
 	@PostMapping("/")

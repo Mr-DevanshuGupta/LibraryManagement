@@ -19,10 +19,12 @@ import com.syvora.syvora.dto.BooksRequestDTO;
 import com.syvora.syvora.dto.BooksResponseDTO;
 import com.syvora.syvora.dto.GenreDTO;
 import com.syvora.syvora.entity.Authors;
+import com.syvora.syvora.entity.BookImage;
 import com.syvora.syvora.entity.Books;
 import com.syvora.syvora.entity.Genres;
 import com.syvora.syvora.exceptions.NoSuchExists;
 import com.syvora.syvora.repository.AuthorRepository;
+import com.syvora.syvora.repository.BookImageRepository;
 import com.syvora.syvora.repository.BooksRepository;
 import com.syvora.syvora.repository.GenresRepository;
 
@@ -37,6 +39,9 @@ public class BooksService {
 
 	@Autowired
 	private GenresRepository genresRepository;
+	
+	@Autowired
+	private BookImageRepository bookImageRepository;
 
 	@Autowired
 	private FileStorageService fileStorageService;
@@ -46,11 +51,9 @@ public class BooksService {
 		Page<Books> booksPage;
 		System.out.println("This is the keyword for fetching all books " + keyword);
 		booksPage = booksRepository.findByKeyword(pageable, keyword);
-//		booksPage = booksRepository.findAll(pageable);
-		BooksResponseDTO booksResponse = new BooksResponseDTO(booksPage.getContent(), (int) booksPage.getTotalElements());
-		return new ResponseEntity<BooksResponseDTO>(booksResponse, HttpStatus.OK); 
-		
-		
+		BooksResponseDTO booksResponse = new BooksResponseDTO(booksPage.getContent(),
+				(int) booksPage.getTotalElements());
+		return new ResponseEntity<BooksResponseDTO>(booksResponse, HttpStatus.OK);
 	}
 
 	public ResponseEntity<Books> add(BooksRequestDTO booksDTO) throws IOException {
@@ -115,6 +118,9 @@ public class BooksService {
 		if (book == null) {
 			throw new NoSuchExists("Book does not exists with id: " + id);
 		}
+		
+		BookImage image = bookImageRepository.findByBook(book);
+		bookImageRepository.delete(image);
 		booksRepository.delete(book);
 		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 	}

@@ -8,7 +8,7 @@ import com.syvora.syvora.repository.UserRepository;
 
 @Service
 public class UserService {
-	
+
 	@Autowired
 	private UserRepository userRepository;
 

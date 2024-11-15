@@ -14,20 +14,16 @@ import com.syvora.syvora.dto.AuthenticationResponse;
 import com.syvora.syvora.dto.RegisterRequest;
 import com.syvora.syvora.service.AuthenticateService;
 
-import lombok.RequiredArgsConstructor;
-
-//@RequiredArgsConstructor
-
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
 
 	@Autowired
 	private AuthenticateService service;
-	
+
 	@GetMapping("/")
-	public ResponseEntity<String> test(){
-		return new ResponseEntity<String>("auth controller is running " , HttpStatus.OK);
+	public ResponseEntity<String> test() {
+		return new ResponseEntity<String>("auth controller is running ", HttpStatus.OK);
 	}
 
 	@PostMapping("/register")
@@ -41,4 +37,3 @@ public class AuthenticationController {
 		return ResponseEntity.ok(service.authenticate(request));
 	}
 }
-

@@ -22,31 +22,31 @@ import com.syvora.syvora.service.AuthorService;
 
 @RestController
 @RequestMapping("/author")
-@CrossOrigin(origins = "http://localhost:3000/",maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:3000/", maxAge = 3600)
 public class AuthorController {
-	
+
 	@Autowired
 	private AuthorService authorService;
-	
+
 	@GetMapping("/")
-	public ResponseEntity<AuthorsResponseDTO> getAll(@RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
-			@RequestParam(value = "pageNumber", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) Integer pageNumber
-){
-		return authorService.getAll(pageSize, pageNumber-1);
+	public ResponseEntity<AuthorsResponseDTO> getAll(
+			@RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) Integer pageSize,
+			@RequestParam(value = "pageNumber", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) Integer pageNumber) {
+		return authorService.getAll(pageSize, pageNumber - 1);
 	}
-	
+
 	@PostMapping("/")
-	public ResponseEntity<Authors> add(@RequestBody AuthorDTO request){
+	public ResponseEntity<Authors> add(@RequestBody AuthorDTO request) {
 		return authorService.add(request);
 	}
-	
+
 	@PutMapping("/{id}")
-	public ResponseEntity<Authors> update(@PathVariable Integer id ,@RequestBody AuthorDTO request){
+	public ResponseEntity<Authors> update(@PathVariable Integer id, @RequestBody AuthorDTO request) {
 		return authorService.update(id, request);
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<HttpStatus> delete(@PathVariable Integer id){
+	public ResponseEntity<HttpStatus> delete(@PathVariable Integer id) {
 		return authorService.delete(id);
 	}
 }

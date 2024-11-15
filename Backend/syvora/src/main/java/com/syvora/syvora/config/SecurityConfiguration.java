@@ -1,6 +1,5 @@
 package com.syvora.syvora.config;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -30,8 +29,10 @@ public class SecurityConfiguration {
 			corsConfig.addAllowedHeader("*");
 			corsConfig.setAllowCredentials(true);
 			return corsConfig;
-		})).authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll().requestMatchers(HttpMethod.GET, "/books/**")
-				.permitAll().requestMatchers("/books/image/**").permitAll().requestMatchers(HttpMethod.GET, "/author/").permitAll().requestMatchers(HttpMethod.GET, "/genres/**").permitAll().anyRequest().authenticated());
+		})).authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll()
+				.requestMatchers(HttpMethod.GET, "/books/**").permitAll().requestMatchers("/books/image/**").permitAll()
+				.requestMatchers(HttpMethod.GET, "/author/").permitAll().requestMatchers(HttpMethod.GET, "/genres/**")
+				.permitAll().anyRequest().authenticated());
 
 		http.authenticationProvider(authenticationProvider);
 		http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
@@ -40,4 +41,3 @@ public class SecurityConfiguration {
 	}
 
 }
-

@@ -1,6 +1,5 @@
 package com.syvora.syvora.config;
 
-
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,30 +26,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		
+
 		final String authHeader = request.getHeader("Authorization");
 		final String jwt;
 		final String userEmail;
-		if(authHeader == null || !authHeader.startsWith("Bearer ")) {
-			 try {
+		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+			try {
 				filterChain.doFilter(request, response);
 			} catch (java.io.IOException | ServletException e) {
 				e.printStackTrace();
 			}
-			 return;
+			return;
 		}
-		
+
 		jwt = authHeader.substring(7);
 		userEmail = jwtservice.extractUsername(jwt);
-		if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+		if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-			if(jwtservice.isTokenValid(jwt, userDetails)) {
-				UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-				authToken.setDetails(
-						new WebAuthenticationDetailsSource().buildDetails(request)
-				);
+			if (jwtservice.isTokenValid(jwt, userDetails)) {
+				UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,
+						null, userDetails.getAuthorities());
+				authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				SecurityContextHolder.getContext().setAuthentication(authToken);
-				
+
 			}
 		}
 		try {
@@ -59,7 +57,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 }
-

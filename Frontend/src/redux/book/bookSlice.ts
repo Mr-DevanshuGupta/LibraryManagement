@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: BookState = {
     books: [],
-    // booksDTO : [],
     totalBooks : 0,
     status: 'idle',
     error: null,
@@ -17,7 +16,6 @@ const bookSlice = createSlice({
         },
         fetchBooksSuccess(state, action: PayloadAction<BooksResponse>) {
             state.status = "succeeded";
-            // state.booksDTO = action.payload.books;
             state.books = action.payload.books;
             state.totalBooks = action.payload.totalBooks;
             
