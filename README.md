@@ -1,4 +1,4 @@
-# LibraryManagement
+
 # Library Management System
 
 An intuitive Library Management System built with modern web technologies to manage books, authors, and genres efficiently.
